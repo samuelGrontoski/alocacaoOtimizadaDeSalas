@@ -151,7 +151,7 @@ tree.heading('Início', text='Início')
 tree.heading('Término', text='Término')
 
 tree.column('#0', width=150)
-tree.column('Disciplina', width=200)
+tree.column('Disciplina', width=200, anchor='center')
 tree.column('Tamanho da Turma', width=120, anchor='center')
 tree.column('Início', width=80, anchor='center')
 tree.column('Término', width=80, anchor='center')
