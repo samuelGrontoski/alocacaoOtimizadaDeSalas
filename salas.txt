@@ -1,0 +1,4 @@
+Sala A, 30
+Sala B, 40
+Sala C, 15
+Sala D, 20

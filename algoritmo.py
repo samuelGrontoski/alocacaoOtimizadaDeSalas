@@ -1,9 +1,11 @@
+import codecs
+
 # Classes
 class Disciplina:
-    def __init__(self, descricao, tamanho_turma, inicio, fim):
+    def __init__(self, descricao, tamanho_turma, hora_inicio, fim):
         self.descricao = descricao
         self.tamanho_turma = tamanho_turma
-        self.inicio = inicio
+        self.hora_inicio = hora_inicio
         self.fim = fim
 
 class Sala:
@@ -12,63 +14,97 @@ class Sala:
         self.capacidade = capacidade
         self.disciplinas = []
 
+# Função que converte uma string de hora no formato HH:MM para minutos
+def hora_para_minutos(hora):
+    # Tenta converter a string de hora para minutos
+    try:
+        h, m = map(int, hora.split(':'))
+        return h * 60 + m
+    # Se não for possível converter, lança uma exceção
+    except ValueError:
+        raise ValueError(f"Formato de hora inválido: {hora}. Use o formato HH:MM.")
+
+# Função para ler as disciplinas de um arquivo .txt
+def ler_disciplinas(arquivo):
+    # Lista para armazenar as disciplinas
+    disciplinas = []
+    # Abre o arquivo .txt e lê as disciplinas e fecha o arquivo automaticamente após a leitura
+    with open(arquivo, 'r', encoding='utf-8') as f:
+        # Lê cada linha do arquivo e separa os dados da disciplina, e adiciona à lista
+        for linha in f:
+            partes = linha.strip().split(', ')
+            descricao = partes[0]
+            tamanho_turma = int(partes[1])
+            hora_inicio = partes[2]
+            fim = partes[3]
+            # Adiciona a disciplina à lista
+            disciplinas.append(Disciplina(descricao, tamanho_turma, hora_inicio, fim))
+    return disciplinas
+
+# Função para ler as salas de um arquivo .txt
+def ler_salas(arquivo):
+    # Lista para armazenar as salas
+    salas = []
+    # Abre o arquivo .txt e lê as salas e fecha o arquivo automaticamente após a leitura
+    with open(arquivo, 'r', encoding='utf-8') as f:
+        # Lê cada linha do arquivo e separa os dados da sala, e adiciona à lista
+        for linha in f:
+            partes = linha.strip().split(', ')
+            identificacao = partes[0]
+            capacidade = int(partes[1])
+            # Adiciona a sala à lista
+            salas.append(Sala(identificacao, capacidade))
+    return salas
+
 # Função para alocar as disciplinas nas salas
 def alocar_disciplinas(disciplinas, salas):
-    # Ordenar as disciplinas pelo horário de término
+    # Ordena de forma crescente as disciplinas pelo horário de término
     disciplinas.sort(key=lambda x: x.fim)
-    # Ordenar as salas pela capacidade
+    # Ordena de forma crescente as salas pela capacidade de alunos
     salas.sort(key=lambda x: x.capacidade)
 
-    # Lista para acompanhar o tempo de término de cada sala
+    # Lista para acompanhar o tempo de término das últimas disciplinas alocadas em cada sala
     fim_salas = [0] * len(salas)
 
     for disciplina in disciplinas:
+        # Converte os horários de início e fim da disciplina para minutos
+        inicio_min = hora_para_minutos(disciplina.hora_inicio)
+        fim_min = hora_para_minutos(disciplina.fim)
         # Tenta alocar a disciplina na primeira sala disponível
         alocada = False
         for i, sala in enumerate(salas):
             # Verifica se a sala pode acomodar a turma e está disponível no horário necessário
-            if sala.capacidade >= disciplina.tamanho_turma and fim_salas[i] <= disciplina.inicio:
+            if sala.capacidade >= disciplina.tamanho_turma and fim_salas[i] <= inicio_min:
+                # Se a sala puder acomodar a turma e estiver disponível, aloca a disciplina
                 sala.disciplinas.append(disciplina)
-                fim_salas[i] = disciplina.fim
+                # Atualiza o tempo de término da última disciplina alocada na sala
+                fim_salas[i] = fim_min
+                # Disciplina alocada com sucesso
                 alocada = True
+                # Sai do loop interno
                 break
 
-        # Se não for possível alocar a disciplina em nenhuma sala, adicionar nova sala (se permitido)
+        # Se não for possível alocar a disciplina em nenhuma sala, imprime uma mensagem de aviso
         if not alocada:
-            print("Não foi possível alocar a disciplina:", disciplina.descricao)
+            print(f"Não foi possível alocar a disciplina: {disciplina.descricao}")
 
-    # Ordenar as salas pelo identificador
+    # Ordena as salas pelo identificador
     salas.sort(key=lambda x: x.identificacao)
     # Retrona as salas com as disciplinas alocadas
     return salas
 
-# Exemplo de uso
-disciplinas = [
-    Disciplina("Matemática", 30, 9, 11),
-    Disciplina("Física", 20, 12, 14),
-    Disciplina("Química", 20, 10, 12),
-    Disciplina("Biologia", 35, 9, 10),
-    Disciplina("Inglês", 15, 12, 14),
-    Disciplina("Alg1", 20, 14, 16),
-    Disciplina("Alg2", 25, 8, 10),
-    Disciplina("Cálculo 1", 40, 10, 12),
-    Disciplina("Cálculo 2", 30, 9, 11),
-    Disciplina("Cálculo 3", 25, 11, 13),
-    Disciplina("Cálculo Numérico", 15, 10, 12),
-]
 
-salas = [
-    Sala("Sala A", 30),
-    Sala("Sala B", 40),
-    Sala("Sala C", 20),
-    Sala("Sala D", 20),
-]
+# Leitura dos arquivos .txt com as disciplinas e salas
+disciplinas = ler_disciplinas('disciplinas.txt')
+salas = ler_salas('salas.txt')
 
 # Chama a função para alocar as disciplinas nas salas
 salas_alocadas = alocar_disciplinas(disciplinas, salas)
 
-# Imprime os dados das salas e disciplinas alocadas
+# Imprime os dados das salas com suas respectivas disciplinas alocadas
+print("\n")
 for sala in salas_alocadas:
     print(f"{sala.identificacao}, Capacidade: {sala.capacidade}")
     for disciplina in sala.disciplinas:
-        print(f"  Disciplina: {disciplina.descricao}, Tamanho: {disciplina.tamanho_turma}, Início: {disciplina.inicio}, Fim: {disciplina.fim}")
+        print(f"  Disciplina: {disciplina.descricao}, Tamanho: {disciplina.tamanho_turma}, Início: {disciplina.hora_inicio}, Fim: {disciplina.fim}")
+    print("\n")
