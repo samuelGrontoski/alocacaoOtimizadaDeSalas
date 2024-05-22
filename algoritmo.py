@@ -39,6 +39,7 @@ def ler_disciplinas(arquivo):
             hora_fim = partes[3]
             # Adiciona a disciplina à lista
             disciplinas.append(Disciplina(descricao, tamanho_turma, hora_inicio, hora_fim))
+    # Retorna a lista de disciplinas        
     return disciplinas
 
 # Função para ler as salas de um arquivo .txt
@@ -54,6 +55,7 @@ def ler_salas(arquivo):
             capacidade = int(partes[1])
             # Adiciona a sala à lista
             salas.append(Sala(identificacao, capacidade))
+    # Retorna a lista de salas
     return salas
 
 # Função para alocar as disciplinas nas salas
