@@ -37,7 +37,9 @@ def alocar_disciplinas(disciplinas, salas):
         if not alocada:
             print("Não foi possível alocar a disciplina:", disciplina.descricao)
 
+    # Ordenar as salas pelo identificador
     salas.sort(key=lambda x: x.identificacao)
+    # Retrona as salas com as disciplinas alocadas
     return salas
 
 # Exemplo de uso
