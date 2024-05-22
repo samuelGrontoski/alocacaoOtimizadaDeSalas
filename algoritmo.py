@@ -2,11 +2,11 @@ import codecs
 
 # Classes
 class Disciplina:
-    def __init__(self, descricao, tamanho_turma, hora_inicio, fim):
+    def __init__(self, descricao, tamanho_turma, hora_inicio, hora_fim):
         self.descricao = descricao
         self.tamanho_turma = tamanho_turma
         self.hora_inicio = hora_inicio
-        self.fim = fim
+        self.hora_fim = hora_fim
 
 class Sala:
     def __init__(self, identificacao, capacidade):
@@ -36,9 +36,9 @@ def ler_disciplinas(arquivo):
             descricao = partes[0]
             tamanho_turma = int(partes[1])
             hora_inicio = partes[2]
-            fim = partes[3]
+            hora_fim = partes[3]
             # Adiciona a disciplina à lista
-            disciplinas.append(Disciplina(descricao, tamanho_turma, hora_inicio, fim))
+            disciplinas.append(Disciplina(descricao, tamanho_turma, hora_inicio, hora_fim))
     return disciplinas
 
 # Função para ler as salas de um arquivo .txt
@@ -59,7 +59,7 @@ def ler_salas(arquivo):
 # Função para alocar as disciplinas nas salas
 def alocar_disciplinas(disciplinas, salas):
     # Ordena de forma crescente as disciplinas pelo horário de término
-    disciplinas.sort(key=lambda x: x.fim)
+    disciplinas.sort(key=lambda x: x.hora_fim)
     # Ordena de forma crescente as salas pela capacidade de alunos
     salas.sort(key=lambda x: x.capacidade)
 
@@ -69,7 +69,7 @@ def alocar_disciplinas(disciplinas, salas):
     for disciplina in disciplinas:
         # Converte os horários de início e fim da disciplina para minutos
         inicio_min = hora_para_minutos(disciplina.hora_inicio)
-        fim_min = hora_para_minutos(disciplina.fim)
+        fim_min = hora_para_minutos(disciplina.hora_fim)
         # Tenta alocar a disciplina na primeira sala disponível
         alocada = False
         for i, sala in enumerate(salas):
@@ -106,5 +106,5 @@ print("\n")
 for sala in salas_alocadas:
     print(f"{sala.identificacao}, Capacidade: {sala.capacidade}")
     for disciplina in sala.disciplinas:
-        print(f"  Disciplina: {disciplina.descricao}, Tamanho: {disciplina.tamanho_turma}, Início: {disciplina.hora_inicio}, Fim: {disciplina.fim}")
+        print(f"  Disciplina: {disciplina.descricao}\tTamanho: {disciplina.tamanho_turma}\tInício: {disciplina.hora_inicio}\tFim: {disciplina.hora_fim}")
     print("\n")
