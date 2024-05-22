@@ -1,4 +1,5 @@
-import codecs
+import tkinter as tk
+from tkinter import ttk
 
 # Classes
 class Disciplina:
@@ -95,7 +96,6 @@ def alocar_disciplinas(disciplinas, salas):
     # Retrona as salas com as disciplinas alocadas
     return salas
 
-
 # Leitura dos arquivos .txt com as disciplinas e salas
 disciplinas = ler_disciplinas('disciplinas.txt')
 salas = ler_salas('salas.txt')
@@ -110,3 +110,54 @@ for sala in salas_alocadas:
     for disciplina in sala.disciplinas:
         print(f"  Disciplina: {disciplina.descricao}\tTamanho: {disciplina.tamanho_turma}\tInício: {disciplina.hora_inicio}\tFim: {disciplina.hora_fim}")
     print("\n")
+
+# Função para exibir a alocação na interface gráfica
+def exibir_alocacao():
+    # Limpa a árvore
+    for item in tree.get_children():
+        tree.delete(item)
+
+    # Adiciona os dados na árvore
+    for sala in salas_alocadas:
+        sala_id = tree.insert('', 'end', text=f"{sala.identificacao} ({sala.capacidade} alunos)", values=('', '', '', ''))
+        for disciplina in sala.disciplinas:
+            tree.insert(sala_id, 'end', values=(disciplina.descricao, disciplina.tamanho_turma, disciplina.hora_inicio, disciplina.hora_fim))
+        tree.item(sala_id, open=True)
+
+# Interface gráfica
+root = tk.Tk()
+root.title("Alocação de Disciplinas em Salas")
+root.geometry("800x400")
+
+# Frame para a árvore
+frame = ttk.Frame(root)
+frame.pack(padx=10, pady=10, fill='both', expand=True)
+
+# Configura a árvore
+columns = ('Disciplina', 'Tamanho da Turma', 'Início', 'Término')
+tree = ttk.Treeview(frame, columns=columns, show='tree headings')
+tree.pack(side='left', fill='both', expand=True)
+
+# Barra de rolagem para a árvore
+scrollbar = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
+scrollbar.pack(side='right', fill='y')
+tree.configure(yscrollcommand=scrollbar.set)
+
+# Configuração das colunas
+tree.heading('#0', text='Sala (Capacidade)')
+tree.heading('Disciplina', text='Disciplina')
+tree.heading('Tamanho da Turma', text='Tamanho da Turma')
+tree.heading('Início', text='Início')
+tree.heading('Término', text='Término')
+
+tree.column('#0', width=150)
+tree.column('Disciplina', width=200)
+tree.column('Tamanho da Turma', width=120, anchor='center')
+tree.column('Início', width=80, anchor='center')
+tree.column('Término', width=80, anchor='center')
+
+# Exibir a alocação na interface gráfica
+exibir_alocacao()
+
+# Inicia a aplicação
+root.mainloop()
