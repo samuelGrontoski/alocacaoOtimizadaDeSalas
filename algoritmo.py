@@ -1,3 +1,4 @@
+# Classes
 class Disciplina:
     def __init__(self, descricao, tamanho_turma, inicio, fim):
         self.descricao = descricao
@@ -11,9 +12,12 @@ class Sala:
         self.capacidade = capacidade
         self.disciplinas = []
 
+# Função para alocar as disciplinas nas salas
 def alocar_disciplinas(disciplinas, salas):
     # Ordenar as disciplinas pelo horário de término
     disciplinas.sort(key=lambda x: x.fim)
+    # Ordenar as salas pela capacidade
+    salas.sort(key=lambda x: x.capacidade)
 
     # Lista para acompanhar o tempo de término de cada sala
     fim_salas = [0] * len(salas)
@@ -33,17 +37,18 @@ def alocar_disciplinas(disciplinas, salas):
         if not alocada:
             print("Não foi possível alocar a disciplina:", disciplina.descricao)
 
+    salas.sort(key=lambda x: x.identificacao)
     return salas
 
 # Exemplo de uso
 disciplinas = [
     Disciplina("Matemática", 30, 9, 11),
     Disciplina("Física", 20, 12, 14),
-    Disciplina("Química", 20, 10, 13),
+    Disciplina("Química", 20, 10, 12),
     Disciplina("Biologia", 35, 9, 10),
     Disciplina("Inglês", 15, 12, 14),
     Disciplina("Alg1", 20, 14, 16),
-    Disciplina("Alg2", 25, 11, 14),
+    Disciplina("Alg2", 25, 8, 10),
     Disciplina("Cálculo 1", 40, 10, 12),
     Disciplina("Cálculo 2", 30, 9, 11),
     Disciplina("Cálculo 3", 25, 11, 13),
@@ -57,9 +62,11 @@ salas = [
     Sala("Sala D", 20),
 ]
 
+# Chama a função para alocar as disciplinas nas salas
 salas_alocadas = alocar_disciplinas(disciplinas, salas)
 
+# Imprime os dados das salas e disciplinas alocadas
 for sala in salas_alocadas:
-    print(f"Sala: {sala.identificacao}, Capacidade: {sala.capacidade}")
+    print(f"{sala.identificacao}, Capacidade: {sala.capacidade}")
     for disciplina in sala.disciplinas:
         print(f"  Disciplina: {disciplina.descricao}, Tamanho: {disciplina.tamanho_turma}, Início: {disciplina.inicio}, Fim: {disciplina.fim}")
