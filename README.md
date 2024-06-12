@@ -50,7 +50,7 @@ A interface gráfica é construída utilizando Tkinter e apresenta uma árvore (
 ## Execução
 
 Para executar a aplicação, utilize o comando:
-<p>`python algoritmo.py`</p>
+`<p>python algoritmo.py</p>`
 
 ## Observações
 
