@@ -27,7 +27,7 @@ O projeto é composto pelos seguintes componentes principais:
 ## Arquivos de Entrada
 
 - **`disciplinas.txt`:** Contém as informações das disciplinas no formato:
-<p>Descrição, Tamanho da Turma, Hora de Início, Hora de Término</p>
+<p>     Descrição, Tamanho da Turma, Hora de Início, Hora de Término</p>
 
 - **`salas.txt`:** Contém as informações das salas no formato:
 Identificação, Capacidade
