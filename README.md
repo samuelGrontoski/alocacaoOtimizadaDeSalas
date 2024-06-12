@@ -1,4 +1,4 @@
-### Alocação Otimizada de Disciplinas em Salas de Aula
+# Alocação Otimizada de Disciplinas em Salas de Aula
 
 ## Descrição
 
@@ -13,7 +13,7 @@ Esta aplicação em Python permite a alocação de disciplinas em salas de aula 
 
 O projeto é composto pelos seguintes componentes principais:
 
-# Classes
+### Classes
 
 - **Disciplina:** Representa uma disciplina com atributos de descrição, tamanho da turma, horário de início e término.
 - **Sala:** Representa uma sala com atributos de identificação, capacidade e uma lista de disciplinas alocadas.
