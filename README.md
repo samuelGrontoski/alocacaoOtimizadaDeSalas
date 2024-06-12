@@ -26,11 +26,11 @@ O projeto é composto pelos seguintes componentes principais:
 
 ## Arquivos de Entrada
 
-- **`disciplinas.txt`:** Contém as informações das disciplinas no formato:
-<p>Descrição, Tamanho da Turma, Hora de Início, Hora de Término</p>
+- **`disciplinas.txt`:** Contém as informações das disciplinas no formato: <br>
+Descrição, Tamanho da Turma, Hora de Início, Hora de Término
 
 - **`salas.txt`:** Contém as informações das salas no formato:
-<p>Identificação, Capacidade</p>
+Identificação, Capacidade
 
 ## Interface Gráfica
 
@@ -49,8 +49,8 @@ A interface gráfica é construída utilizando Tkinter e apresenta uma árvore (
 
 ## Execução
 
-Para executar a aplicação, utilize o comando:
-`<p>python algoritmo.py</p>`
+Para executar a aplicação, utilize o comando: <br>
+`python algoritmo.py`
 
 ## Observações
 
