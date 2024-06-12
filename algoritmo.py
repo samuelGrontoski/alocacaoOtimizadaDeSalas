@@ -124,10 +124,13 @@ def exibir_alocacao():
             tree.insert(sala_id, 'end', values=(disciplina.descricao, disciplina.tamanho_turma, disciplina.hora_inicio, disciplina.hora_fim))
         tree.item(sala_id, open=True)
 
+        # Adiciona uma linha de separação após cada sala
+        tree.insert('', 'end', values=('', '', '', ''), tags=('separator'))
+
 # Interface gráfica
 root = tk.Tk()
-root.title("Alocação de Disciplinas em Salas")
-root.geometry("800x400")
+root.title("Alocação Otimizada de Disciplinas em Salas de Aula")
+root.geometry("960x540")
 
 # Frame para a árvore
 frame = ttk.Frame(root)
@@ -150,11 +153,15 @@ tree.heading('Tamanho da Turma', text='Tamanho da Turma')
 tree.heading('Início', text='Início')
 tree.heading('Término', text='Término')
 
-tree.column('#0', width=150)
-tree.column('Disciplina', width=200, anchor='center')
-tree.column('Tamanho da Turma', width=120, anchor='center')
+tree.column('#0', width=80, anchor='w')
+tree.column('Disciplina', width=200, anchor='w')
+tree.column('Tamanho da Turma', width=80, anchor='center')
 tree.column('Início', width=80, anchor='center')
 tree.column('Término', width=80, anchor='center')
+
+# Estilo da árvore
+style = ttk.Style()
+style.configure('Treeview', rowheight=25, font=('Roboto', 10))
 
 # Exibir a alocação na interface gráfica
 exibir_alocacao()
