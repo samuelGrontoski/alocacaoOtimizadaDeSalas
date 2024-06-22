@@ -36,16 +36,16 @@ O projeto é composto pelos seguintes componentes principais:
 
 A interface gráfica é construída utilizando Tkinter e apresenta uma árvore (Treeview) para exibir as salas e suas respectivas disciplinas alocadas.
 
+## Requisitos
+
+- Python 3.x
+- Tkinter (incluído na maioria das distribuições Python)
+
 ## Instruções de Uso
 
 1. Certifique-se de ter os arquivos disciplinas.txt e salas.txt no mesmo diretório do script Python.
 2. Execute o script Python. A interface gráfica será aberta e exibirá a alocação das disciplinas nas salas.
 3. Na interface, você poderá visualizar cada sala com sua capacidade e as disciplinas alocadas com seus respectivos horários e tamanhos de turma.
-
-## Requisitos
-
-- Python 3.x
-- Tkinter (incluído na maioria das distribuições Python)
 
 ## Execução
 

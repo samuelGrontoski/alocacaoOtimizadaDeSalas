@@ -15,6 +15,9 @@ class Sala:
         self.capacidade = capacidade
         self.disciplinas = []
 
+# Variável para armazenar as disciplinas não alocadas
+disciplinasNaoAlocadas = []
+
 # Função que converte uma string de hora no formato HH:MM para minutos
 def hora_para_minutos(hora):
     # Tenta converter a string de hora para minutos
@@ -61,14 +64,10 @@ def ler_salas(arquivo):
 
 # Função para alocar as disciplinas nas salas
 def alocar_disciplinas(disciplinas, salas):
-    # Ordena de forma crescente as disciplinas pelo horário de término
-    disciplinas.sort(key=lambda x: x.hora_fim)
-    # Ordena de forma crescente as salas pela capacidade de alunos
-    salas.sort(key=lambda x: x.capacidade)
-
     # Lista para acompanhar o tempo de término das últimas disciplinas alocadas em cada sala
     fim_salas = [0] * len(salas)
 
+    # Para cada disciplina, tenta alocar em uma sala disponível
     for disciplina in disciplinas:
         # Converte os horários de início e fim da disciplina para minutos
         inicio_min = hora_para_minutos(disciplina.hora_inicio)
@@ -89,36 +88,49 @@ def alocar_disciplinas(disciplinas, salas):
 
         # Se não for possível alocar a disciplina em nenhuma sala, imprime uma mensagem de aviso
         if not alocada:
-            print(f"Não foi possível alocar a disciplina: {disciplina.descricao}")
+            disciplinasNaoAlocadas.append(disciplina)
 
     # Ordena as salas pelo identificador
     salas.sort(key=lambda x: x.identificacao)
+
     # Retrona as salas com as disciplinas alocadas
     return salas
+
+def exibir_disciplinas_nao_alocadas():
+    print("\nDisciplinas não alocadas:")
+    for disciplina in disciplinasNaoAlocadas:
+        print(f"{disciplina.descricao}\tTamanho: {disciplina.tamanho_turma}\tInício: {disciplina.hora_inicio}\tFim: {disciplina.hora_fim}")
 
 # Leitura dos arquivos .txt com as disciplinas e salas
 disciplinas = ler_disciplinas('disciplinas.txt')
 salas = ler_salas('salas.txt')
 
+# Ordena as disciplinas pelo horário de início e as salas pela capacidade de forma crescente
+disciplinas.sort(key=lambda x: x.hora_fim)
+salas.sort(key=lambda x: x.capacidade)
+
 # Chama a função para alocar as disciplinas nas salas
-salas_alocadas = alocar_disciplinas(disciplinas, salas)
+disciplinasAlocadas = alocar_disciplinas(disciplinas, salas)
 
 # Imprime os dados das salas com suas respectivas disciplinas alocadas
 print("\n")
-for sala in salas_alocadas:
+for sala in disciplinasAlocadas:
     print(f"{sala.identificacao}, Capacidade: {sala.capacidade}")
     for disciplina in sala.disciplinas:
         print(f"  Disciplina: {disciplina.descricao}\tTamanho: {disciplina.tamanho_turma}\tInício: {disciplina.hora_inicio}\tFim: {disciplina.hora_fim}")
     print("\n")
 
+# Exibe as disciplinas não alocadas
+exibir_disciplinas_nao_alocadas()
+
 # Função para exibir a alocação na interface gráfica
-def exibir_alocacao():
+def exibir_alocacao(disciplinasAlocadas, disciplinasNaoAlocadas):
     # Limpa a árvore
     for item in tree.get_children():
         tree.delete(item)
 
-    # Adiciona os dados na árvore
-    for sala in salas_alocadas:
+    # Adiciona os dados das salas na árvore
+    for sala in disciplinasAlocadas:
         sala_id = tree.insert('', 'end', text=f"{sala.identificacao} ({sala.capacidade} alunos)", values=('', '', '', ''))
         for disciplina in sala.disciplinas:
             tree.insert(sala_id, 'end', values=(disciplina.descricao, disciplina.tamanho_turma, disciplina.hora_inicio, disciplina.hora_fim))
@@ -126,6 +138,15 @@ def exibir_alocacao():
 
         # Adiciona uma linha de separação após cada sala
         tree.insert('', 'end', values=('', '', '', ''), tags=('separator'))
+
+    # Adiciona uma linha de separação antes das disciplinas não alocadas
+    tree.insert('', 'end', values=('', '', '', ''), tags=('separator'))
+
+    # Adiciona as disciplinas não alocadas na árvore
+    nao_alocadas_id = tree.insert('', 'end', text="Disciplinas Não Alocadas", values=('', '', '', ''))
+    for disciplina in disciplinasNaoAlocadas:
+        tree.insert(nao_alocadas_id, 'end', values=(disciplina.descricao, disciplina.tamanho_turma, disciplina.hora_inicio, disciplina.hora_fim))
+    tree.item(nao_alocadas_id, open=True)
 
 # Interface gráfica
 root = tk.Tk()
@@ -163,8 +184,8 @@ tree.column('Término', width=80, anchor='center')
 style = ttk.Style()
 style.configure('Treeview', rowheight=25, font=('Roboto', 10))
 
-# Exibir a alocação na interface gráfica
-exibir_alocacao()
+# Exibir a alocação na interface gráfica com as listas de disciplinas alocadas e não alocadas
+exibir_alocacao(disciplinasAlocadas, disciplinasNaoAlocadas)
 
 # Inicia a aplicação
 root.mainloop()
